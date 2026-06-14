@@ -16,3 +16,11 @@
 - Determined that missing real-robot/high-fidelity evidence, template-generated experiments, and unresolved novelty threats are not recoverable from local artifacts.
 - Recompiled the canonical PDF with `Submission-hardening version: v3`.
 - Terminal decision: KILL_ARCHIVE.
+
+## v4 - Causal Scene-Flow Evidence Audit
+- Replaced the template scaffold with a deterministic local 3D interaction-flow benchmark.
+- Added point-level causal masks, eight methods, five physical-shift splits, ablations, stress sweeps, negative cases, and figures.
+- Main result: causal scene-flow model loses to learned correlation classifier on combined hard-shift mask F1.
+- Ablation result: correlation-only causal head improves over the full structured mechanism.
+- Recompiled the canonical PDF with `Submission-hardening version: v4`.
+- Terminal decision: KILL_ARCHIVE.
