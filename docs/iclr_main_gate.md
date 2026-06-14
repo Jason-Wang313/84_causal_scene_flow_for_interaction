@@ -2,18 +2,18 @@
 
 Paper: 84 causal_scene_flow_for_interaction
 
-Existing v2 decision: KILL_ARCHIVE
+Existing v3 decision: KILL_ARCHIVE
 
 Gate verdict: KILL_ARCHIVE
 
-Evidence digest: d0b445fadae5f5ca
+Evidence digest: v4-causal-scene-flow-negative
 
 Fatal blockers:
-- Synthetic-only evidence.
-- Template-generated experiment and writing.
+- Local-only interaction-flow evidence.
+- Proposed causal model loses to learned correlation on mask F1.
+- Correlation-only ablation improves over the full structured mechanism.
 - No real robot or high-fidelity benchmark.
-- No trained WAM/model checkpoint.
-- No implemented real baselines.
+- No trained intervention-labeled scene-flow model on real robot data.
 - No manual exhaustive related-work synthesis.
 
 The only honest main-conference-safe decision is to archive rather than overclaim.

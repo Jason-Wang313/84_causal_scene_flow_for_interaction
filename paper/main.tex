@@ -4,42 +4,153 @@
 \usepackage{hyperref}
 \usepackage{url}
 \usepackage{booktabs}
-\title{Causal Scene Flow for Interaction: ICLR Main-Conference Gate Archive}
+\usepackage{graphicx}
+
+\graphicspath{{../figures/}}
+
+\title{Causal Scene Flow for Interaction:\\A Negative ICLR-Main Evidence Audit}
 \author{Anonymous Authors}
+
 \begin{document}
 \maketitle
+
 \begin{abstract}
-This document is not an ICLR main-conference submission. It is the v3 main-conference gate for a generated robotics draft about 3D perception for manipulation. The original research bet was: Infer which scene-flow components are caused by robot action versus passive motion. After a stricter hostile review, the honest terminal decision is \textbf{KILL/ARCHIVE}. Submission-hardening version: v3.
+Interactive robot perception should not treat all 3D scene flow as equivalent. A robot pushing an object needs to distinguish motion caused by its action from passive conveyor flow, exogenous distractor motion, camera/ego motion, occlusion artifacts, and articulated coupling. We rebuilt this paper around a deterministic local interaction-flow benchmark with five physical-shift splits, eight methods, seven seeds, 11,760 main rollouts, 2,058 ablation rollouts, and 25,200 stress rollouts. The benchmark is useful, but the result is negative. On the combined hard-shift split, the proposed causal scene-flow model reaches 0.7609 mask F1 and 0.5646 downstream target success. A learned correlation classifier reaches 0.7723 mask F1 and 0.5476 target success. The proposed model is safer, with lower unsafe contact and slightly lower passive false attribution, but the paired mask-F1 difference versus the learned baseline is $-0.0114 \pm 0.0184$. Worse, the correlation-only ablation improves to 0.7878 mask F1. We therefore mark this paper \textbf{KILL/ARCHIVE}: the benchmark is reproducible and informative, but the proposed mechanism is not supported well enough for an ICLR-main-target submission.
 \end{abstract}
 
-\section{Gate Decision}
-The v2 paper was workshop-only. Under the active ICLR-main standard, that is insufficient. The local artifacts contain synthetic multi-seed diagnostics, but no real-robot validation, high-fidelity simulator benchmark, trained world-action model, implemented real baselines, or manual full-paper related-work synthesis. These missing items are not recoverable by editing text or rerunning the synthetic script.
+\section{Terminal Decision}
+\textbf{Decision: KILL/ARCHIVE for ICLR main.} The repository now contains a paper-specific local benchmark, strong baselines, ablations, stress tests, figures, and reproducibility files. The method still fails the main claim: explicit causal scene-flow decomposition does not beat the learned correlation baseline on the primary attribution metric, and an ablation that removes the structured decomposition improves performance.
 
-\section{Fatal ICLR-Main Blockers}
+\section{Research Question}
+The intended claim was:
+\begin{quote}
+Infer which scene-flow components are caused by robot action versus passive motion.
+\end{quote}
+This is a real robotics problem. Passive flow and action-caused flow can both be large, aligned, or spatially adjacent. A manipulation policy that attributes passive motion to its own action may choose the wrong target, collide with a distractor, or overestimate controllability. A positive paper would need to show that causal decomposition changes perception in a way that improves both mask attribution and downstream interaction.
+
+\section{Benchmark}
+The v4 benchmark simulates local 3D interaction scenes with point-level flow masks. Each scene has an action vector, causal object motion, passive flow, distractor contact flow, articulated coupling, occlusion, ego motion, and sensor noise. The five splits are:
 \begin{itemize}
-\item Evidence is synthetic and generated from a shared batch template.
-\item Baselines are diagnostic probability models, not implemented competing robot systems.
-\item Ablations do not correspond to a trained model checkpoint.
-\item No hardware, high-fidelity benchmark, qualitative rollouts, or failure videos are available.
-\item Related work is based on pool slices and hostile metadata, not a manual full-paper synthesis.
-\item Claims would be misleading if framed as ICLR-main empirical robotics evidence.
+\item \textbf{clean contact:} direct robot-caused motion with mild passive flow;
+\item \textbf{passive conveyor:} strong passive motion unrelated to the robot;
+\item \textbf{articulated coupling:} delayed or attenuated action-caused motion through linked parts;
+\item \textbf{occluded interaction:} partially hidden robot-caused flow;
+\item \textbf{combined hard shift:} passive flow, articulation, occlusion, and distractor contact combined.
+\end{itemize}
+Metrics include causal mask F1, precision, recall, occluded recall, passive false attribution, action-effect vector error, downstream target success, unsafe contact, Brier score, and calibration error.
+
+\section{Methods}
+We compare:
+\begin{itemize}
+\item \textbf{Flow magnitude threshold:} labels large motion as causal.
+\item \textbf{Action-direction projection:} labels flow aligned with the robot action.
+\item \textbf{Rigid scene-flow cluster:} groups coherent moving points.
+\item \textbf{Temporal difference mask:} subtracts scene-level median flow.
+\item \textbf{Noncausal flow-transformer proxy:} uses contact and flow features without intervention structure.
+\item \textbf{Learned correlation classifier:} predicts causal masks from action-flow correlation and contact features.
+\item \textbf{Causal scene-flow model:} subtracts passive flow, uses action conditioning, articulation priors, and occlusion reasoning.
+\item \textbf{Oracle causal mask:} hidden ground-truth ceiling.
 \end{itemize}
 
-\section{Hostile Prior-Work Pressure}
-The closest local hostile records include:
+\section{Main Results}
+Table~\ref{tab:main} shows the combined hard-shift split. The proposed model substantially improves over magnitude, rigid clustering, temporal differencing, and the noncausal proxy. But it does not beat the learned correlation classifier on mask F1, the primary attribution metric.
+
+\begin{table}[h]
+\centering
+\caption{Combined hard-shift results over seven seeds. Confidence intervals are 95\% intervals over seed means.}
+\label{tab:main}
+\begin{tabular}{lrrrr}
+\toprule
+Method & Mask F1 & Target success & Passive false & Unsafe contact \\
+\midrule
+Magnitude threshold & $0.399 \pm 0.005$ & $0.112$ & $0.967$ & $0.316$ \\
+Action projection & $0.627 \pm 0.020$ & $0.364$ & $0.524$ & $0.214$ \\
+Rigid flow cluster & $0.525 \pm 0.006$ & $0.150$ & $0.992$ & $0.347$ \\
+Temporal difference & $0.433 \pm 0.008$ & $0.116$ & $0.955$ & $0.344$ \\
+Noncausal proxy & $0.559 \pm 0.009$ & $0.242$ & $0.853$ & $0.242$ \\
+Learned correlation & $\mathbf{0.772 \pm 0.011}$ & $0.548$ & $0.357$ & $0.146$ \\
+Causal scene flow & $0.761 \pm 0.011$ & $\mathbf{0.565}$ & $\mathbf{0.349}$ & $\mathbf{0.122}$ \\
+Oracle causal mask & $1.000 \pm 0.000$ & $0.932$ & $0.000$ & $0.017$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.88\linewidth]{causal_flow_f1.png}
+\caption{Causal mask F1 across shifts. The proposed model helps on hard settings but does not separate from the learned correlation classifier.}
+\label{fig:f1}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.86\linewidth]{causal_flow_downstream.png}
+\caption{Attribution and downstream target success on combined hard shift. Downstream success slightly favors the proposed model, but the mask attribution claim fails.}
+\label{fig:downstream}
+\end{figure}
+
+\section{Ablations}
+The ablation table is the strongest reason to archive the paper. If passive-flow factoring, action conditioning, articulation structure, and occlusion reasoning were the validated mechanism, the full model should beat simplified alternatives. Instead, the correlation-only causal head reaches 0.7878 mask F1, above the full model's 0.7609.
+
+\begin{table}[h]
+\centering
+\caption{Ablations on combined hard shift.}
+\label{tab:ablation}
+\begin{tabular}{lrrrr}
+\toprule
+Ablation & Mask F1 & Target success & Passive false & Effect error \\
+\midrule
+Full causal scene flow & $0.761 \pm 0.011$ & $0.565$ & $0.349$ & $0.638$ \\
+Minus action conditioning & $0.719 \pm 0.014$ & $0.483$ & $0.442$ & $0.735$ \\
+Minus passive-flow factor & $0.694 \pm 0.013$ & $0.422$ & $0.512$ & $0.632$ \\
+Minus articulation graph & $0.747 \pm 0.010$ & $\mathbf{0.588}$ & $0.276$ & $0.575$ \\
+Minus occlusion reasoning & $0.747 \pm 0.010$ & $0.558$ & $0.337$ & $0.616$ \\
+Correlation-only causal head & $\mathbf{0.788 \pm 0.011}$ & $\mathbf{0.588}$ & $\mathbf{0.325}$ & $\mathbf{0.551}$ \\
+Mask-only no effect predictor & $0.761 \pm 0.011$ & $0.442$ & $0.349$ & $1.058$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.88\linewidth]{causal_flow_ablation.png}
+\caption{Ablations contradict the intended mechanism: the correlation-only head improves mask F1.}
+\label{fig:ablation}
+\end{figure}
+
+\section{Stress Tests}
+Stress sweeps vary passive-flow amplitude, occlusion, articulation delay, distractor contact, and combined stress. At maximum combined stress, the proposed model reaches 0.7449 mask F1 and 0.5000 target success, while the learned correlation classifier reaches 0.7780 mask F1 and 0.4881 target success. The proposed model remains useful for safety but not for the primary attribution claim.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.88\linewidth]{causal_flow_stress_sweep.png}
+\caption{Combined stress sweep. The learned correlation baseline remains stronger on mask F1.}
+\label{fig:stress}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.86\linewidth]{causal_flow_failures.png}
+\caption{False causal attribution and unsafe contacts. The proposed method improves safety rates but not enough to rescue the method claim.}
+\label{fig:failures}
+\end{figure}
+
+\section{Why This Is Not Submission-Ready}
+The project fails the ICLR-main readiness gate for three reasons.
 \begin{itemize}
-\item Aerial Manipulation with Contact-Aware Onboard Perception and Hybrid Control (2026)
-\item HRIBench: Benchmarking Vision-Language Models for Real-Time Human Perception in Human-Robot Interaction (2025)
-\item Natural teaching for humanoid robot via human-in-the-loop scene-motion cross-modal perception (2019)
-\item Sensing the Action: Rethinking Sensor Modalities and Multi-Modal Fusion in Vision-Language-Action Models for Robotic Manipulation (2026)
-\item DUEL: Depth visUal Ego-motion Learning for autonomous robot obstacle avoidance (2024)
+\item \textbf{Primary metric failure.} The proposed model loses to the learned correlation classifier on combined hard-shift mask F1.
+\item \textbf{Ablation contradiction.} The correlation-only causal head improves over the full structured causal decomposition.
+\item \textbf{Evidence ceiling.} The benchmark is deterministic and reproducible, but it is local and synthetic, not hardware evidence, not a high-fidelity simulator benchmark, and not an accepted external dataset.
 \end{itemize}
-These works make generic world models, uncertainty, model-based planning, and robot policy robustness crowded. Without real empirical evidence, the remaining novelty boundary is too weak for ICLR main.
 
-\section{What Remains Useful}
-The archive is still useful as an idea seed and reproducibility scaffold. The synthetic code, stress-test CSVs, reviewer attacks, and novelty-boundary docs can inform a future project. The correct next step is not more paper polishing; it is new evidence: implemented models, real baselines, manual related work, and robot or high-fidelity simulator validation.
+\section{Reproducibility}
+Run the benchmark from the repository root:
+\begin{verbatim}
+python src\run_experiment.py
+\end{verbatim}
+The script writes main rollouts, seed-level metrics, pairwise statistics, ablations, stress sweeps, negative cases, summary text, and the figures used in this manuscript. The canonical local PDF is \texttt{C:/Users/wangz/Downloads/84.pdf}.
 
-\section{Terminal Action}
-Decision: \textbf{KILL/ARCHIVE for ICLR main}. Do not submit this paper to ICLR main in the current form. Revival requires a substantially new empirical project.
+\section{Conclusion}
+Causal source separation in scene flow remains important for interaction. The v4 benchmark shows that naive flow methods badly over-attribute passive motion, and explicit causal modeling can reduce unsafe contacts. But the proposed mechanism does not beat a learned correlation classifier on mask attribution and fails a central ablation gate. The honest terminal action is \textbf{KILL/ARCHIVE}.
 
 \end{document}
