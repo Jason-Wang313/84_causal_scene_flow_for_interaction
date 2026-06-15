@@ -4,6 +4,8 @@ Submission-hardening version: v4
 
 Terminal decision: **KILL_ARCHIVE** for ICLR main conference.
 
+Latest audit rerun: 2026-06-15.
+
 This repository contains a reproducible local evidence audit for the research bet:
 
 > Infer which scene-flow components are caused by robot action versus passive motion.
@@ -12,6 +14,7 @@ The v4 rebuild replaces the template scaffold with a deterministic local 3D inte
 
 ## Why This Is Archived
 
+- The 2026-06-15 rerun regenerated 11,760 main rollouts, 2,058 ablation rollouts, and 25,200 stress rollouts.
 - On the combined hard-shift split, `causal_scene_flow_model` reaches `0.76087 +/- 0.01126` mask F1.
 - The strongest non-oracle baseline, `learned_correlation_classifier`, reaches `0.77230 +/- 0.01102` mask F1.
 - The paired mask-F1 difference versus the learned baseline is `-0.01144 +/- 0.01838`.

@@ -10,3 +10,6 @@
 8. Exact Downloads PDF path: `C:/Users/wangz/Downloads/84.pdf`
 9. GitHub URL: https://github.com/Jason-Wang313/84_causal_scene_flow_for_interaction
 10. Confirmation: no visible Desktop copy was requested or made.
+11. 2026-06-15 rerun: 11,760 main rollouts, 2,058 ablation rollouts, and 25,200 stress rollouts reproduced `KILL_ARCHIVE`.
+12. Hard-split gate: `causal_scene_flow_model` vs `learned_correlation_classifier` paired mask-F1 difference is `-0.01144 +/- 0.01838`.
+13. Mechanism gate: `correlation_only_causal_head` improves mask F1 to `0.78781`, above the full model at `0.76087`.

@@ -21,6 +21,8 @@ Interactive robot perception should not treat all 3D scene flow as equivalent. A
 \section{Terminal Decision}
 \textbf{Decision: KILL/ARCHIVE for ICLR main.} The repository now contains a paper-specific local benchmark, strong baselines, ablations, stress tests, figures, and reproducibility files. The method still fails the main claim: explicit causal scene-flow decomposition does not beat the learned correlation baseline on the primary attribution metric, and an ablation that removes the structured decomposition improves performance.
 
+All reported CSV-backed results were regenerated from source on 2026-06-15. The rerun reproduced the same terminal outcome: \textbf{KILL/ARCHIVE}.
+
 \section{Research Question}
 The intended claim was:
 \begin{quote}
@@ -55,8 +57,10 @@ We compare:
 \section{Main Results}
 Table~\ref{tab:main} shows the combined hard-shift split. The proposed model substantially improves over magnitude, rigid clustering, temporal differencing, and the noncausal proxy. But it does not beat the learned correlation classifier on mask F1, the primary attribution metric.
 
-\begin{table}[h]
+\begin{table}[tbp]
 \centering
+\small
+\setlength{\tabcolsep}{3pt}
 \caption{Combined hard-shift results over seven seeds. Confidence intervals are 95\% intervals over seed means.}
 \label{tab:main}
 \begin{tabular}{lrrrr}
@@ -75,14 +79,14 @@ Oracle causal mask & $1.000 \pm 0.000$ & $0.932$ & $0.000$ & $0.017$ \\
 \end{tabular}
 \end{table}
 
-\begin{figure}[h]
+\begin{figure}[tbp]
 \centering
 \includegraphics[width=0.88\linewidth]{causal_flow_f1.png}
 \caption{Causal mask F1 across shifts. The proposed model helps on hard settings but does not separate from the learned correlation classifier.}
 \label{fig:f1}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[tbp]
 \centering
 \includegraphics[width=0.86\linewidth]{causal_flow_downstream.png}
 \caption{Attribution and downstream target success on combined hard shift. Downstream success slightly favors the proposed model, but the mask attribution claim fails.}
@@ -92,8 +96,10 @@ Oracle causal mask & $1.000 \pm 0.000$ & $0.932$ & $0.000$ & $0.017$ \\
 \section{Ablations}
 The ablation table is the strongest reason to archive the paper. If passive-flow factoring, action conditioning, articulation structure, and occlusion reasoning were the validated mechanism, the full model should beat simplified alternatives. Instead, the correlation-only causal head reaches 0.7878 mask F1, above the full model's 0.7609.
 
-\begin{table}[h]
+\begin{table}[tbp]
 \centering
+\small
+\setlength{\tabcolsep}{3pt}
 \caption{Ablations on combined hard shift.}
 \label{tab:ablation}
 \begin{tabular}{lrrrr}
@@ -111,7 +117,7 @@ Mask-only no effect predictor & $0.761 \pm 0.011$ & $0.442$ & $0.349$ & $1.058$ 
 \end{tabular}
 \end{table}
 
-\begin{figure}[h]
+\begin{figure}[tbp]
 \centering
 \includegraphics[width=0.88\linewidth]{causal_flow_ablation.png}
 \caption{Ablations contradict the intended mechanism: the correlation-only head improves mask F1.}
@@ -121,14 +127,14 @@ Mask-only no effect predictor & $0.761 \pm 0.011$ & $0.442$ & $0.349$ & $1.058$ 
 \section{Stress Tests}
 Stress sweeps vary passive-flow amplitude, occlusion, articulation delay, distractor contact, and combined stress. At maximum combined stress, the proposed model reaches 0.7449 mask F1 and 0.5000 target success, while the learned correlation classifier reaches 0.7780 mask F1 and 0.4881 target success. The proposed model remains useful for safety but not for the primary attribution claim.
 
-\begin{figure}[h]
+\begin{figure}[tbp]
 \centering
 \includegraphics[width=0.88\linewidth]{causal_flow_stress_sweep.png}
 \caption{Combined stress sweep. The learned correlation baseline remains stronger on mask F1.}
 \label{fig:stress}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[tbp]
 \centering
 \includegraphics[width=0.86\linewidth]{causal_flow_failures.png}
 \caption{False causal attribution and unsafe contacts. The proposed method improves safety rates but not enough to rescue the method claim.}
@@ -148,7 +154,7 @@ Run the benchmark from the repository root:
 \begin{verbatim}
 python src\run_experiment.py
 \end{verbatim}
-The script writes main rollouts, seed-level metrics, pairwise statistics, ablations, stress sweeps, negative cases, summary text, and the figures used in this manuscript. The canonical local PDF is \texttt{C:/Users/wangz/Downloads/84.pdf}.
+The script writes main rollouts, seed-level metrics, pairwise statistics, ablations, stress sweeps, negative cases, summary text, and the figures used in this manuscript. The 2026-06-15 audit verified 11,760 main rollout rows, 2,058 ablation rollout rows, 25,200 stress rollout rows, and seven seeds. The canonical local PDF is \texttt{C:/Users/wangz/Downloads/84.pdf}.
 
 \section{Conclusion}
 Causal source separation in scene flow remains important for interaction. The v4 benchmark shows that naive flow methods badly over-attribute passive motion, and explicit causal modeling can reduce unsafe contacts. But the proposed mechanism does not beat a learned correlation classifier on mask attribution and fails a central ablation gate. The honest terminal action is \textbf{KILL/ARCHIVE}.
