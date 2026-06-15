@@ -192,3 +192,17 @@ Attack: No meaningful recoverable ICLR-main issue remains after archiving.
 Verdict: Terminal condition reached.
 
 Action: Mark KILL_ARCHIVE and stop.
+
+## ICLR Main Gate Round 28
+Attack: The negative result might have been stale or generated before the final evidence rerun.
+
+Verdict: Rejected. The 2026-06-15 rerun reproduced the terminal outcome with 11,760 main rollouts, 2,058 ablation rollouts, 25,200 stress rollouts, and `terminal=KILL_ARCHIVE`.
+
+Action: Preserve `KILL_ARCHIVE`.
+
+## ICLR Main Gate Round 29
+Attack: The method may still be acceptable because target success and safety slightly favor the proposed model.
+
+Verdict: Insufficient for ICLR main. Target-success gain over learned correlation is `0.01701 +/- 0.08624`, and the primary attribution metric loses by `-0.01144 +/- 0.01838`. The correlation-only ablation also improves mask F1, target success, passive false attribution, effect error, and unsafe contact.
+
+Action: State the safety/downstream observation as a useful negative-result signal, not as a submission-ready claim.
