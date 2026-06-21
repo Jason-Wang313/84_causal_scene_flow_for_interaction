@@ -1,35 +1,101 @@
-Paper 84 causal_scene_flow_for_interaction v4 rebuild
+Paper 84 causal_scene_flow_for_interaction v5 expanded rebuild
 Terminal recommendation: KILL_ARCHIVE
-Reason: deterministic local interaction-flow benchmark added; no robot hardware or external high-fidelity benchmark is available.
-Main rollout rows: 11760
-Ablation rollout rows: 2058
-Stress rollout rows: 25200
-Seeds: [0, 1, 2, 3, 4, 5, 6]
+Reason: CPU-only local interaction-flow benchmark expanded with interventional residual theory, stronger baselines, hard aggregate, ablations, stress, fixed-risk deployment, and negative cases; no robot hardware or external high-fidelity benchmark is present.
+Main rollout rows: 74880
+Dataset rows: 5760
+Ablation rollout rows: 16000
+Stress rollout rows: 94080
+Fixed-risk rollout rows: 30720
+Negative cases: 24
+Seeds: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 
-Combined hard shift:
-flow_magnitude_threshold mask_f1=0.39920 ci95=0.00478 target_success=0.11225 passive_false=0.96697 effect_error=0.80114 unsafe=0.31633
-action_direction_projection mask_f1=0.62695 ci95=0.01968 target_success=0.36394 passive_false=0.52391 effect_error=0.47965 unsafe=0.21429
-rigid_scene_flow_cluster mask_f1=0.52536 ci95=0.00628 target_success=0.14966 passive_false=0.99249 effect_error=0.78532 unsafe=0.34694
-temporal_difference_mask mask_f1=0.43297 ci95=0.00775 target_success=0.11565 passive_false=0.95458 effect_error=0.81044 unsafe=0.34354
-noncausal_flow_transformer_proxy mask_f1=0.55907 ci95=0.00942 target_success=0.24150 passive_false=0.85308 effect_error=0.74485 unsafe=0.24150
-learned_correlation_classifier mask_f1=0.77230 ci95=0.01102 target_success=0.54762 passive_false=0.35708 effect_error=0.40446 unsafe=0.14626
-causal_scene_flow_model mask_f1=0.76087 ci95=0.01126 target_success=0.56463 passive_false=0.34947 effect_error=0.63808 unsafe=0.12245
-oracle_causal_mask mask_f1=1.00000 ci95=0.00000 target_success=0.93197 passive_false=0.00000 effect_error=0.00000 unsafe=0.01701
-paired mask-F1 diff vs best F1 baseline learned_correlation_classifier=-0.01144 ci95=0.01838
-paired target-success diff vs best success baseline learned_correlation_classifier=0.01701 ci95=0.08624
+Hard-regime aggregate:
+flow_magnitude_threshold mask_f1=0.47586 ci95=0.00090 target_success=0.27187 causal_utility=0.10220 passive_false=0.75905 effect_error=0.72658 unsafe=0.24980
+action_direction_projection mask_f1=0.64801 ci95=0.00391 target_success=0.51309 causal_utility=0.41162 passive_false=0.45526 effect_error=0.41108 unsafe=0.15703
+rigid_scene_flow_cluster mask_f1=0.62629 ci95=0.00077 target_success=0.39961 causal_utility=0.26332 passive_false=0.69113 effect_error=0.64738 unsafe=0.21172
+temporal_difference_mask mask_f1=0.47537 ci95=0.00146 target_success=0.23926 causal_utility=0.06369 passive_false=0.83357 effect_error=0.74198 unsafe=0.26836
+noncausal_flow_transformer_proxy mask_f1=0.74144 ci95=0.00124 target_success=0.58047 causal_utility=0.48714 passive_false=0.34979 effect_error=0.46258 unsafe=0.13965
+learned_correlation_classifier mask_f1=0.82107 ci95=0.00179 target_success=0.69746 causal_utility=0.62850 passive_false=0.22062 effect_error=0.29982 unsafe=0.10840
+calibrated_tree_flow_proxy mask_f1=0.83277 ci95=0.00170 target_success=0.71973 causal_utility=0.65876 passive_false=0.20541 effect_error=0.30742 unsafe=0.08320
+contrastive_action_flow mask_f1=0.83774 ci95=0.00186 target_success=0.73555 causal_utility=0.67778 passive_false=0.15339 effect_error=0.23572 unsafe=0.08730
+scene_flow_transformer_proxy mask_f1=0.79228 ci95=0.00177 target_success=0.65937 causal_utility=0.58117 passive_false=0.29170 effect_error=0.36114 unsafe=0.11914
+world_model_flow_predictor mask_f1=0.83169 ci95=0.00193 target_success=0.73164 causal_utility=0.67103 passive_false=0.18562 effect_error=0.37228 unsafe=0.07226
+causal_scene_flow_model_v4 mask_f1=0.82557 ci95=0.00177 target_success=0.70801 causal_utility=0.64884 passive_false=0.20563 effect_error=0.39990 unsafe=0.07988
+causal_scene_flow_model_v5 mask_f1=0.81699 ci95=0.00175 target_success=0.70918 causal_utility=0.64823 passive_false=0.22730 effect_error=0.41542 unsafe=0.07695
+oracle_causal_mask mask_f1=1.00000 ci95=0.00000 target_success=0.97949 causal_utility=0.96234 passive_false=0.00000 effect_error=0.00000 unsafe=0.00918
 
-Ablations:
-full_causal_scene_flow_model mask_f1=0.76087 ci95=0.01126 target_success=0.56463 passive_false=0.34947 effect_error=0.63808 unsafe=0.12245 occluded_recall=0.93264
-minus_action_conditioning mask_f1=0.71898 ci95=0.01356 target_success=0.48299 passive_false=0.44198 effect_error=0.73484 unsafe=0.15987 occluded_recall=0.96109
-minus_passive_flow_factor mask_f1=0.69415 ci95=0.01328 target_success=0.42177 passive_false=0.51205 effect_error=0.63245 unsafe=0.14626 occluded_recall=1.00000
-minus_articulation_graph mask_f1=0.74692 ci95=0.01007 target_success=0.58844 passive_false=0.27623 effect_error=0.57493 unsafe=0.13606 occluded_recall=0.76626
-minus_occlusion_reasoning mask_f1=0.74736 ci95=0.00980 target_success=0.55782 passive_false=0.33728 effect_error=0.61601 unsafe=0.19048 occluded_recall=0.81736
-correlation_only_causal_head mask_f1=0.78781 ci95=0.01137 target_success=0.58844 passive_false=0.32462 effect_error=0.55097 unsafe=0.10204 occluded_recall=0.96892
-mask_only_no_effect_predictor mask_f1=0.76087 ci95=0.01126 target_success=0.44218 passive_false=0.34947 effect_error=1.05808 unsafe=0.14286 occluded_recall=0.93264
+Decision gates:
+best_f1_reference: contrastive_action_flow
+best_f1_reference_mask_f1: 0.83774
+best_utility_reference: contrastive_action_flow
+best_utility_reference_causal_utility: 0.67778
+proposed_hard_mask_f1: 0.81699
+proposed_hard_causal_utility: 0.64823
+hard_mask_f1_margin: -0.020750000000000046
+hard_causal_utility_margin: -0.029550000000000076
+paired_mask_f1_lower95: -0.02228
+paired_causal_utility_lower95: -0.03869
+safety_reference: contrastive_action_flow
+safety_reference_sum: 0.24069000000000002
+proposed_safety_sum: 0.30425
+margin_gate: False
+paired_gate: False
+safety_gate: False
+ablation_gate: False
+fixed_risk_gate: False
+stress_gate: True
 
-Combined stress level 1.0:
-action_direction_projection mask_f1=0.59203 ci95=0.02536 target_success=0.33333 passive_false=0.46347 effect_error=0.60705 unsafe=0.21428
-noncausal_flow_transformer_proxy mask_f1=0.52235 ci95=0.00826 target_success=0.14881 passive_false=0.98959 effect_error=1.04991 unsafe=0.30952
-learned_correlation_classifier mask_f1=0.77801 ci95=0.02427 target_success=0.48810 passive_false=0.35455 effect_error=0.55075 unsafe=0.14286
-causal_scene_flow_model mask_f1=0.74491 ci95=0.02253 target_success=0.50000 passive_false=0.35047 effect_error=0.83493 unsafe=0.17857
-oracle_causal_mask mask_f1=1.00000 ci95=0.00000 target_success=0.92262 passive_false=0.00000 effect_error=0.00000 unsafe=0.01191
+Pairwise hard aggregate versus best F1 and utility references:
+contrastive_action_flow mask_f1 diff=-0.02076 ci95=0.00152 lower95=-0.02228 better_seeds=0/10
+contrastive_action_flow target_success diff=-0.02637 ci95=0.01243 lower95=-0.03880 better_seeds=0/10
+contrastive_action_flow causal_utility diff=-0.02955 ci95=0.00914 lower95=-0.03869 better_seeds=0/10
+contrastive_action_flow passive_false_attribution diff=0.07392 ci95=0.00181 lower95=0.07210 better_seeds=0/10
+contrastive_action_flow effect_error diff=0.17970 ci95=0.00508 lower95=0.17462 better_seeds=0/10
+contrastive_action_flow unsafe_contact diff=-0.01035 ci95=0.00927 lower95=-0.01962 better_seeds=6/10
+contrastive_action_flow risk_upper diff=0.04047 ci95=0.00053 lower95=0.03994 better_seeds=0/10
+contrastive_action_flow intervention_consistency diff=0.06792 ci95=0.00061 lower95=0.06731 better_seeds=10/10
+
+Ablation results:
+combined_hard_shift full_causal_scene_flow_model_v5 mask_f1=0.75649 ci95=0.00625 target_success=0.62125 passive_false=0.28290 effect_error=0.55659 unsafe=0.08250 causal_utility=0.55355
+combined_hard_shift minus_action_conditioning mask_f1=0.75185 ci95=0.00497 target_success=0.56375 passive_false=0.31458 effect_error=0.62426 unsafe=0.12500 causal_utility=0.47853
+combined_hard_shift minus_passive_flow_factor mask_f1=0.71457 ci95=0.00703 target_success=0.49750 passive_false=0.49032 effect_error=0.54291 unsafe=0.17500 causal_utility=0.39397
+combined_hard_shift minus_articulation_graph mask_f1=0.71404 ci95=0.00885 target_success=0.57625 passive_false=0.20599 effect_error=0.48582 unsafe=0.13750 causal_utility=0.49974
+combined_hard_shift minus_occlusion_reasoning mask_f1=0.74891 ci95=0.00571 target_success=0.57250 passive_false=0.26212 effect_error=0.55314 unsafe=0.12375 causal_utility=0.50311
+combined_hard_shift minus_counterfactual_negatives mask_f1=0.75612 ci95=0.00622 target_success=0.58625 passive_false=0.30929 effect_error=0.56688 unsafe=0.12000 causal_utility=0.51035
+combined_hard_shift minus_uncertainty_calibration mask_f1=0.74199 ci95=0.00693 target_success=0.61500 passive_false=0.31295 effect_error=0.56876 unsafe=0.17500 causal_utility=0.50838
+combined_hard_shift correlation_only_causal_head mask_f1=0.73995 ci95=0.00927 target_success=0.55750 passive_false=0.33586 effect_error=0.48859 unsafe=0.13500 causal_utility=0.47505
+combined_hard_shift mask_only_no_effect_predictor mask_f1=0.75649 ci95=0.00625 target_success=0.45000 passive_false=0.28290 effect_error=1.01659 unsafe=0.14125 causal_utility=0.38493
+combined_hard_shift old_v4_causal_score mask_f1=0.76927 ci95=0.00614 target_success=0.62750 passive_false=0.25309 effect_error=0.54987 unsafe=0.13000 causal_utility=0.54478
+distractor_contact_shift full_causal_scene_flow_model_v5 mask_f1=0.77418 ci95=0.00382 target_success=0.64875 passive_false=0.30144 effect_error=0.47283 unsafe=0.11625 causal_utility=0.56960
+distractor_contact_shift minus_action_conditioning mask_f1=0.73717 ci95=0.00387 target_success=0.56125 passive_false=0.36066 effect_error=0.54690 unsafe=0.15000 causal_utility=0.46555
+distractor_contact_shift minus_passive_flow_factor mask_f1=0.71235 ci95=0.00717 target_success=0.55875 passive_false=0.48023 effect_error=0.50213 unsafe=0.14875 causal_utility=0.45209
+distractor_contact_shift minus_articulation_graph mask_f1=0.76547 ci95=0.00499 target_success=0.64250 passive_false=0.22995 effect_error=0.38790 unsafe=0.10000 causal_utility=0.57590
+distractor_contact_shift minus_occlusion_reasoning mask_f1=0.76964 ci95=0.00329 target_success=0.64000 passive_false=0.28457 effect_error=0.45655 unsafe=0.14250 causal_utility=0.55361
+distractor_contact_shift minus_counterfactual_negatives mask_f1=0.76582 ci95=0.00418 target_success=0.63750 passive_false=0.32623 effect_error=0.49407 unsafe=0.12500 causal_utility=0.55090
+distractor_contact_shift minus_uncertainty_calibration mask_f1=0.76224 ci95=0.00415 target_success=0.63000 passive_false=0.32646 effect_error=0.49600 unsafe=0.17125 causal_utility=0.52920
+distractor_contact_shift correlation_only_causal_head mask_f1=0.76879 ci95=0.00464 target_success=0.63875 passive_false=0.31779 effect_error=0.42924 unsafe=0.16375 causal_utility=0.53693
+distractor_contact_shift mask_only_no_effect_predictor mask_f1=0.77418 ci95=0.00382 target_success=0.47000 passive_false=0.30144 effect_error=0.93283 unsafe=0.13500 causal_utility=0.41013
+distractor_contact_shift old_v4_causal_score mask_f1=0.78365 ci95=0.00273 target_success=0.60625 passive_false=0.27664 effect_error=0.45020 unsafe=0.12125 causal_utility=0.54154
+
+Combined stress level 1.50:
+action_direction_projection mask_f1=0.37103 ci95=0.00483 target_success=0.22187 unsafe=0.28750 risk_upper=0.36807 causal_utility=0.04445
+learned_correlation_classifier mask_f1=0.55224 ci95=0.00837 target_success=0.32500 unsafe=0.26875 risk_upper=0.31849 causal_utility=0.17170
+calibrated_tree_flow_proxy mask_f1=0.59287 ci95=0.01101 target_success=0.38438 unsafe=0.22187 risk_upper=0.33096 causal_utility=0.24678
+contrastive_action_flow mask_f1=0.49532 ci95=0.00826 target_success=0.31562 unsafe=0.20625 risk_upper=0.29552 causal_utility=0.17733
+world_model_flow_predictor mask_f1=0.56339 ci95=0.01351 target_success=0.37500 unsafe=0.19062 risk_upper=0.30216 causal_utility=0.23756
+causal_scene_flow_model_v5 mask_f1=0.56934 ci95=0.01091 target_success=0.35000 unsafe=0.12812 risk_upper=0.32587 causal_utility=0.24002
+oracle_causal_mask mask_f1=1.00000 ci95=0.00000 target_success=0.95312 unsafe=0.02813 risk_upper=0.03410 causal_utility=0.93706
+
+Fixed-risk budget 0.05:
+combined_hard_shift calibrated_tree_flow_proxy coverage=0.00000 fixed_risk_success=0.00000 executed_success=0.00000 false_safe_rate=0.00000 unsafe=0.00000 risk_upper=0.22455
+combined_hard_shift causal_scene_flow_model_v5 coverage=0.00000 fixed_risk_success=0.00000 executed_success=0.00000 false_safe_rate=0.00000 unsafe=0.00000 risk_upper=0.21169
+combined_hard_shift contrastive_action_flow coverage=0.00000 fixed_risk_success=0.00000 executed_success=0.00000 false_safe_rate=0.00000 unsafe=0.00000 risk_upper=0.18684
+combined_hard_shift learned_correlation_classifier coverage=0.00000 fixed_risk_success=0.00000 executed_success=0.00000 false_safe_rate=0.00000 unsafe=0.00000 risk_upper=0.21282
+combined_hard_shift oracle_causal_mask coverage=1.00000 fixed_risk_success=0.97656 executed_success=0.97656 false_safe_rate=0.00625 unsafe=0.00625 risk_upper=0.02147
+combined_hard_shift world_model_flow_predictor coverage=0.00000 fixed_risk_success=0.00000 executed_success=0.00000 false_safe_rate=0.00000 unsafe=0.00000 risk_upper=0.19712
+distractor_contact_shift calibrated_tree_flow_proxy coverage=0.00000 fixed_risk_success=0.00000 executed_success=0.00000 false_safe_rate=0.00000 unsafe=0.00000 risk_upper=0.22142
+distractor_contact_shift causal_scene_flow_model_v5 coverage=0.00000 fixed_risk_success=0.00000 executed_success=0.00000 false_safe_rate=0.00000 unsafe=0.00000 risk_upper=0.21331
+distractor_contact_shift contrastive_action_flow coverage=0.00000 fixed_risk_success=0.00000 executed_success=0.00000 false_safe_rate=0.00000 unsafe=0.00000 risk_upper=0.18039
+distractor_contact_shift learned_correlation_classifier coverage=0.00000 fixed_risk_success=0.00000 executed_success=0.00000 false_safe_rate=0.00000 unsafe=0.00000 risk_upper=0.20137
+distractor_contact_shift oracle_causal_mask coverage=1.00000 fixed_risk_success=0.96719 executed_success=0.96719 false_safe_rate=0.02031 unsafe=0.02031 risk_upper=0.01963
+distractor_contact_shift world_model_flow_predictor coverage=0.00000 fixed_risk_success=0.00000 executed_success=0.00000 false_safe_rate=0.00000 unsafe=0.00000 risk_upper=0.20301

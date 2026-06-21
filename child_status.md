@@ -1,11 +1,11 @@
 # Child Status 84
 
-Current stage: ICLR main v4 evidence audit terminal
-Last update: 2026-06-15 09:17:18 +01:00
+Current stage: ICLR main v5 expanded evidence audit terminal
+Last update: 2026-06-21
 PDF: C:/Users/wangz/Downloads/84.pdf
 GitHub: https://github.com/Jason-Wang313/84_causal_scene_flow_for_interaction
-Submission-hardening version: v4
+Submission-hardening version: v5 expanded
 Terminal decision: KILL_ARCHIVE
 ICLR main ready: no
 
-Reason: the 2026-06-15 full rerun regenerated 11,760 main rollouts, 2,058 ablation rollouts, and 25,200 stress rollouts. The causal scene-flow model still loses to the learned correlation classifier on combined hard-shift mask F1 (`-0.01144 +/- 0.01838` paired difference), the downstream target-success gain is non-decisive (`0.01701 +/- 0.08624`), and the correlation-only ablation improves over the full structured mechanism. No robot hardware or high-fidelity simulator validation is available.
+Reason: the 2026-06-21 frozen v5 rebuild regenerated 74,880 main rollouts, 5,760 scene records, 16,000 ablation rollouts, 94,080 stress rollouts, 30,720 fixed-risk rollouts, and 24 negative cases. The proposed `causal_scene_flow_model_v5` loses the hard-regime aggregate to `contrastive_action_flow` on mask F1 (`0.81699` vs `0.83774`) and causal utility (`0.64823` vs `0.67778`). Paired lower bounds are negative, the safety sum is worse, ablation necessity fails, and fixed-risk coverage at budget `0.05` is zero for all non-oracle methods. The paper remains a local synthetic diagnostic and lacks robot hardware or accepted high-fidelity benchmark validation.
