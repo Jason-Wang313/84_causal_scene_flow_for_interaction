@@ -30,3 +30,12 @@
 - Re-ran `python src\run_experiment.py` from source and reproduced `terminal=KILL_ARCHIVE`.
 - Verified 11,760 main rollouts, 2,058 ablation rollouts, 25,200 stress rollouts, seven seeds, eight methods, seven ablations, five stress axes, and four negative cases.
 - Preserved the terminal decision because the proposed model loses the primary mask-F1 gate and the correlation-only ablation remains stronger than the full mechanism.
+
+## v5 - 2026-06-21 Expanded Submission-Readiness Audit
+- Wrote `docs/paper84_expanded_submission_plan_20260621.md` before editing or running the new protocol.
+- Replaced the v4 runner with a CPU-only, RAM-light frozen protocol: 10 seeds, 128-point scenes, nine splits, 13 methods, hard-regime aggregate, paired tests, two-split ablations, six stress axes, four fixed-risk budgets, and 24 negative cases.
+- Added `causal_scene_flow_model_v5`, `causal_scene_flow_model_v4`, `calibrated_tree_flow_proxy`, `contrastive_action_flow`, `scene_flow_transformer_proxy`, and `world_model_flow_predictor` comparisons.
+- Regenerated 74,880 main rollouts, 5,760 scene records, 16,000 ablation rollouts, 94,080 stress rollouts, 30,720 fixed-risk rollouts, and 24 negative cases.
+- Generated a 39-page ICLR-style PDF with bright clickable citation boxes at `C:/Users/wangz/Downloads/84.pdf`.
+- Added `scripts/generate_manuscript.py` and `scripts/validate_submission_artifacts.py`.
+- Terminal decision remains `KILL_ARCHIVE`: v5 loses to `contrastive_action_flow` on hard mask F1 and causal utility, paired lower bounds are negative, safety and ablation gates fail, and strict fixed-risk coverage collapses.

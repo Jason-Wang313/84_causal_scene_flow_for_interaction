@@ -1,5 +1,25 @@
-case,expected_behavior,observed_outcome,lesson
-deformable_liquid_motion,do not attribute splash flow to rigid robot contact,causal mask fragments under non-rigid flow,needs deformable-flow priors before hardware claims
-human_moves_object_during_contact,separate human-caused and robot-caused flow,causal decomposition confuses simultaneous interventions,multi-agent intervention labels are out of scope
-transparent_object_depth_failure,abstain when depth flow is unreliable,mask confidence can remain over-calibrated,sensor-validity gating must be separate
-tool_slip_without_visible_flow,recover from tactile evidence,RGB-D flow alone misses hidden contact slip,causal scene flow is not a tactile substitute
+source,split,seed,episode_id,method,failure_label,mask_f1,target_success,unsafe_contact,passive_false_attribution,effect_error,risk_upper,fixed_risk_budget,coverage,lesson
+strong_baseline_success,clean_contact,0,0,calibrated_tree_flow_proxy,success,0.95385,1,0,0.08333,0.13386,0.13391,,1,counterexample showing a baseline or ablation can succeed without the full mechanism
+strong_baseline_success,clean_contact,0,0,world_model_flow_predictor,success,0.98413,1,0,0.02778,0.06500,0.10884,,1,counterexample showing a baseline or ablation can succeed without the full mechanism
+strong_baseline_success,clean_contact,0,1,learned_correlation_classifier,success,0.76923,1,0,0.25000,0.35994,0.15541,,1,counterexample showing a baseline or ablation can succeed without the full mechanism
+v5_main_failure,clean_contact,0,3,causal_scene_flow_model_v5,unrecovered_passive_shift,0.81081,0,0,0.26000,0.37232,0.16830,,1,the causal mask looked plausible but downstream effect prediction failed
+v5_main_failure,clean_contact,0,18,causal_scene_flow_model_v5,unsafe_false_causal,0.75410,1,1,0.34091,0.37633,0.19422,,1,passive or distractor flow was still attributed to robot action
+strong_baseline_success,passive_conveyor,0,0,calibrated_tree_flow_proxy,success,0.93939,1,0,0.07143,0.08183,0.14329,,1,counterexample showing a baseline or ablation can succeed without the full mechanism
+strong_baseline_success,passive_conveyor,0,0,world_model_flow_predictor,success,0.95082,1,0,0.00000,0.27982,0.10773,,1,counterexample showing a baseline or ablation can succeed without the full mechanism
+strong_baseline_success,passive_conveyor,0,1,learned_correlation_classifier,success,0.95082,1,0,0.07317,0.13567,0.11572,,1,counterexample showing a baseline or ablation can succeed without the full mechanism
+v5_main_failure,passive_conveyor,0,3,causal_scene_flow_model_v5,unsafe_false_causal,0.73016,0,1,0.37500,0.65793,0.20776,,1,passive or distractor flow was still attributed to robot action
+v5_main_failure,passive_conveyor,0,9,causal_scene_flow_model_v5,unrecovered_passive_shift,0.82540,0,0,0.26316,0.52492,0.18461,,1,the causal mask looked plausible but downstream effect prediction failed
+strong_baseline_success,articulated_coupling,0,0,learned_correlation_classifier,success,0.98462,1,0,0.00000,0.09828,0.09256,,1,counterexample showing a baseline or ablation can succeed without the full mechanism
+strong_baseline_success,articulated_coupling,0,0,calibrated_tree_flow_proxy,success,0.98462,1,0,0.00000,0.09828,0.12205,,1,counterexample showing a baseline or ablation can succeed without the full mechanism
+strong_baseline_success,articulated_coupling,0,0,world_model_flow_predictor,success,1.00000,1,0,0.00000,0.23104,0.10948,,1,counterexample showing a baseline or ablation can succeed without the full mechanism
+v5_main_failure,articulated_coupling,0,1,causal_scene_flow_model_v5,unrecovered_passive_shift,0.80000,0,0,0.23913,0.29601,0.17855,,1,the causal mask looked plausible but downstream effect prediction failed
+v5_main_failure,articulated_coupling,0,12,causal_scene_flow_model_v5,unsafe_false_causal,0.79412,0,1,0.29787,0.35271,0.19547,,1,passive or distractor flow was still attributed to robot action
+strong_baseline_success,occluded_interaction,0,0,world_model_flow_predictor,success,0.76923,1,0,0.24444,0.48678,0.18906,,1,counterexample showing a baseline or ablation can succeed without the full mechanism
+strong_baseline_success,occluded_interaction,0,1,calibrated_tree_flow_proxy,success,0.79167,1,0,0.19149,0.59277,0.18692,,1,counterexample showing a baseline or ablation can succeed without the full mechanism
+v5_main_failure,occluded_interaction,0,1,causal_scene_flow_model_v5,unrecovered_passive_shift,0.77551,0,0,0.21277,0.76083,0.17629,,1,the causal mask looked plausible but downstream effect prediction failed
+strong_baseline_success,occluded_interaction,0,2,learned_correlation_classifier,success,0.75362,1,0,0.34884,0.38491,0.20298,,1,counterexample showing a baseline or ablation can succeed without the full mechanism
+v5_main_failure,occluded_interaction,0,24,causal_scene_flow_model_v5,unsafe_false_causal,0.80597,1,1,0.24490,0.49226,0.18758,,1,passive or distractor flow was still attributed to robot action
+strong_baseline_success,occluded_interaction,0,25,learned_correlation_classifier,success,0.90909,1,0,0.08333,0.35343,0.13198,,1,counterexample showing a baseline or ablation can succeed without the full mechanism
+strong_baseline_success,occluded_interaction,0,25,calibrated_tree_flow_proxy,success,0.92593,1,0,0.05556,0.32549,0.15358,,1,counterexample showing a baseline or ablation can succeed without the full mechanism
+strong_baseline_success,occluded_interaction,0,25,world_model_flow_predictor,success,0.94118,1,0,0.00000,0.33485,0.12729,,1,counterexample showing a baseline or ablation can succeed without the full mechanism
+strong_baseline_success,occluded_interaction,0,26,calibrated_tree_flow_proxy,success,0.95082,1,0,0.05714,0.38673,0.14635,,1,counterexample showing a baseline or ablation can succeed without the full mechanism
